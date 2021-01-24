@@ -1,0 +1,33 @@
+﻿<Window x:Class="Sudoku2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku2"
+        xmlns:vm="clr-namespace:Sudoku2.ViewModel"
+        mc:Ignorable="d"
+       Title="Sudoku" Height="516" Width="698"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="500" MinWidth="616">
+
+    <Grid x:Name="MainGrid">
+
+        <Menu Height="25" VerticalAlignment="Top">
+            <MenuItem Header="File" Height="25" Width="79.5" HorizontalContentAlignment="Left">
+                <Separator/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Frame Content="{Binding CurrentPage}"
+               NavigationUIVisibility="Hidden"
+               Margin="0,30,0,0">
+            
+        </Frame>
+
+
+
+
+
+    </Grid>
+</Window>

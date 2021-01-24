@@ -1,0 +1,24 @@
+﻿<Window x:Class="Sudoku2.View.Windows.NewNumbersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku2.View.Windows"
+        mc:Ignorable="d"
+             Title="" Height="242.178" Width="198.172" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Button Content="1" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="3" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="128,119,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="8" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="70,26,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="5" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="70,70,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="2" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="70,119,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="7" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="4" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="9" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="128,26,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+        <Button Content="6" Command="{Binding Numeral}" CommandParameter="{Binding Content,  RelativeSource={RelativeSource Self} }"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="129,70,0,0" VerticalAlignment="Top" Width="40" Height="25"/>
+
+        <Button VerticalAlignment="Bottom" Margin="20 0 20 5" Content="Clean" Command="{Binding CleanCommand}"/>
+
+    </Grid>
+</Window>

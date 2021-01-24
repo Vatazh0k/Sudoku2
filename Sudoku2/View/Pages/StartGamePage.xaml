@@ -1,0 +1,71 @@
+﻿<Page x:Class="Sudoku2.View.Pages.StartGamePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Sudoku2.View.Pages"
+      xmlns:vm="clr-namespace:Sudoku2.ViewModel"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StartGamePage" Height="470" Width="698">
+
+    <Grid>
+        <Grid x:Name="Field"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Left"
+              Height="410" Width="410"
+              Margin="20">
+
+        </Grid>
+
+
+        <Label VerticalAlignment="Bottom"
+               HorizontalAlignment="Right"
+               Width="120"
+               Height="50"
+               Content="{Binding Timer}"
+               Margin="0,0,10,62"
+               FontSize="15">
+
+        </Label>
+
+        <Button VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Width="154"
+                Height="56" Margin="0,30,28,0"
+                Content="New Game"
+                Command="{Binding NewGameCommand}"/>
+
+        <Button VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Width="120"
+                Height="50" Margin="0,180,28,0"
+                Content="Continue"
+                Command="{Binding ContinueCommand}"/>
+
+        <Button VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Width="120"
+                Height="50" Margin="0,264,28,0"
+                Content="Pause"
+                Command="{Binding PauseCommand}"/>
+
+        <Button VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Width="78"
+                Height="22" Margin="0,391,600,0"
+                Content="Clean all"
+                FontSize="12"
+                Background="White"
+                Foreground="Black"
+                Command="{Binding CleanAllCommand}"/>
+
+        <CheckBox Content="Calculate"
+                  VerticalAlignment="Bottom"
+                  HorizontalAlignment="Left" 
+                  Margin="302,0,0,57"
+                  Command="{Binding ShowDecision}"
+                  IsChecked="{Binding showDecision}"/>
+
+    </Grid>
+</Page>

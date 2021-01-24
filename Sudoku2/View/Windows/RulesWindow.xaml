@@ -1,0 +1,23 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku2.View.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="Sudoku2.View.Windows.RulesWindow"
+        mc:Ignorable="d"
+        Title="RulesWindow" Height="498" Width="509" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <ScrollViewer>
+            <TextBlock  Margin="5,0,23,0" TextWrapping="Wrap" FontSize="16" >The Rules of Sudoku <LineBreak/>
+The classic Sudoku game involves a grid of 81 squares. The grid is divided into nine blocks, each containing nine squares.
+
+The rules of the game are simple: each of the nine blocks has to contain all the numbers 1-9 within its squares. Each number can only appear once in a row, column or box.
+
+The difficulty lies in that each vertical nine-square column, or horizontal nine-square line across, within the larger square, must also contain the numbers 1-9, without repetition or omission.
+
+Every puzzle has just one correct solution.</TextBlock>
+        </ScrollViewer>
+
+    </Grid>
+</Window>
