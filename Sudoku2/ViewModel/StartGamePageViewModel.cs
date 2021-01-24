@@ -243,4 +243,4 @@ namespace Sudoku2.ViewModel
         #endregion
     }
 }
-       
+        

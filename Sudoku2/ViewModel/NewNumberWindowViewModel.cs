@@ -72,7 +72,6 @@ namespace Sudoku2.ViewModel
             if (isGameWinning)
             {
                 vm.ElementChooseWindow.Close();
-                vm.gameInProccess = false;
                 vm.timer.Stop();
                 MessageBox.Show("You win!", "Congratulations", MessageBoxButton.OK);
                 return;
