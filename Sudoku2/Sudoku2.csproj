@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BuisnessLogic\GameSolution.cs" />
+    <Compile Include="BuisnessLogic\NumberAssignment.cs" />
     <Compile Include="ViewModel\NewNumberWindowViewModel.cs" />
     <Compile Include="View\Windows\NewNumbersWindow.xaml.cs">
       <DependentUpon>NewNumbersWindow.xaml</DependentUpon>

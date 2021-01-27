@@ -12,36 +12,7 @@ namespace Sudoku2.BuisnessLogic
 {
     public static class GameSolution 
     {
-        #region PublicMethods
-
-        public static void HideDecision(string[,] tempField, StartGamePageViewModel vm)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    vm.CellsArray[i * 9 + j] = TempField[i, j];
-                }
-            }
-        }
-
-        public static void ShowDecision(string[,] tempField, StartGamePageViewModel vm)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (vm.CellsArray[i * 9 + j] != null && vm.CellsArray[i * 9 + j] != vm.ReadyField[i * 9 + j])
-                    {
-                        vm.Color[i * 9 + j] = new SolidColorBrush(Colors.Red);
-                    }
-                    TempField[i, j] = vm.CellsArray[i * 9 + j];
-                    vm.CellsArray[i * 9 + j] = vm.ReadyField[i * 9 + j];
-                }
-            }
-        }
-
-        public static ObservableCollection<string> FieldSolution(FieldModel model, ObservableCollection<string> field)
+        public static ObservableCollection<string> FieldSolution(FieldModel model, ObservableCollection<string> field, ObservableCollection<Brush> color)
         {
             #region private Data
             int nullElemntsCount = 0;
@@ -63,22 +34,19 @@ namespace Sudoku2.BuisnessLogic
                 //TODO: if (nullElemntsCount == nullElementCountAfterFieldFilling) {new algo}
             }
 
-            field = CellsAssign(field, TempField);
+            field = CellsAssign(field, TempField, color);
 
             return field;
         }
+     
 
-        public static bool NullElementsCount(ObservableCollection<string> cellsArray)
-        {
-            for (int i = 0; i < 81; i++)
-                if (cellsArray[i] is null)
-                    return false;
-            return true;
-        }
+        #region PrivateMethods
+        private static string[,] TempField = new string[9, 9];
+
 
         public static bool SearchSameElemnt(string[,] Arr, int CurrentRow, int CurrentColumn, int CurrentElement)
         {
-            bool SameElemntInRow = false; 
+            bool SameElemntInRow = false;
             bool SameElemntInColumn = false;
             bool SameElemntInSquar = false;
 
@@ -139,56 +107,6 @@ namespace Sudoku2.BuisnessLogic
             return true;
         }
 
-        public static void NewNumberAssignment(int Cell, StartGamePageViewModel vm, object p)
-        {
-            #region Data
-            bool isSameElement = false;
-            string[,] tempField = new string[9, 9];
-            #endregion
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    tempField[i, j] = vm.CellsArray[i * 9 + j];
-                }
-            }
-
-            vm.Color[Cell] = new SolidColorBrush(Colors.AntiqueWhite);
-            vm.CellsArray[Cell] = p.ToString();
-
-            if (vm.CellsArray[Cell] == vm.ReadyField[Cell])
-            {
-                vm.Color[Cell] = new SolidColorBrush(Colors.AntiqueWhite);
-                return;
-            }
-
-            bool CicleEnd = false;
-            for (int i = 0, CellSearch = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++, CellSearch++)
-                {
-                    if (CellSearch == Cell)
-                    {
-                        tempField[i, j] = null;
-                        CicleEnd = true;
-                        isSameElement = SearchSameElemnt(tempField, i, j, Convert.ToInt32(p));
-                        break;
-                    }
-                }
-                if (CicleEnd) break;
-            }
-
-            if (isSameElement is true)
-                vm.Color[Cell] = new SolidColorBrush(Colors.Red);
-
-
-        }
-        #endregion
-
-        #region PrivateMethods
-        private static string[,] TempField = new string[9, 9];
-
-
         private static string[,] CellsAssign(string[,] assignableArray, ObservableCollection<string> assignArray)
         {
             for (int i = 0; i < assignableArray.GetLength(0); i++)
@@ -200,12 +118,13 @@ namespace Sudoku2.BuisnessLogic
             }
             return assignableArray;
         }
-        private static ObservableCollection<string> CellsAssign(ObservableCollection<string> assignArray, string[,] assignableArray)
+        private static ObservableCollection<string> CellsAssign(ObservableCollection<string> assignArray, string[,] assignableArray, ObservableCollection<Brush> color)
         {
             for (int i = 0; i < assignableArray.GetLength(0); i++)
             {
                 for (int j = 0; j < assignableArray.GetLength(1); j++)
                 {
+                    color[i * 9 + j] = new SolidColorBrush(Colors.AntiqueWhite);
                     assignArray[i * 9 + j] = assignableArray[i, j];
                 }
             }
@@ -301,6 +220,6 @@ namespace Sudoku2.BuisnessLogic
         }
         #endregion
 
-    }
+    } 
 }
-       
+         

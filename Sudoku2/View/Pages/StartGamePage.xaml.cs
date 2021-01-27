@@ -100,9 +100,15 @@ namespace Sudoku2.View.Pages
 
             button[i - 1, j - 1].SetBinding(Button.ContentProperty, binding);
 
-
-            button[i - 1, j - 1].Command = vm.NewNumberAssigningCommand;
-            button[i - 1, j - 1].CommandParameter = button[i - 1, j - 1].Name;
+            if (button[i - 1, j - 1].Content is null)
+            {
+                button[i - 1, j - 1].Command = vm.NewNumberAssigningCommand;
+                button[i - 1, j - 1].CommandParameter = button[i - 1, j - 1].Name;
+            }
+            else
+            {
+                button[i - 1, j - 1].FontWeight = FontWeights.Bold;
+            }
 
 
             Grid.SetRow(button[i - 1, j - 1], i - 1);
@@ -112,3 +118,4 @@ namespace Sudoku2.View.Pages
         #endregion
     }
 }
+ 

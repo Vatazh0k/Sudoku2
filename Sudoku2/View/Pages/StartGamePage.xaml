@@ -60,12 +60,15 @@
                 Foreground="Black"
                 Command="{Binding CleanAllCommand}"/>
 
-        <CheckBox Content="Calculate"
+        <Button Content="Calculate"
                   VerticalAlignment="Bottom"
                   HorizontalAlignment="Left" 
-                  Margin="302,0,0,57"
+                  Margin="294,0,0,57"
                   Command="{Binding ShowDecision}"
-                  IsChecked="{Binding showDecision}"/>
+                  Background="White"
+                 Foreground="Black"
+                FontSize="12"
+                Height="22"/>
 
     </Grid>
 </Page>

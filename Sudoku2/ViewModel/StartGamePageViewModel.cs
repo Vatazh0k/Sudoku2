@@ -27,12 +27,10 @@ namespace Sudoku2.ViewModel
         private TimeSpan timeSpan;
         private string[,] TempField;
         private string _timer;
-        private bool _showDecision;
 
         private ObservableCollection<Brush> _color;
         private ObservableCollection<string> _CellsArray;
-        private ObservableCollection<string> _ReadyField;
-
+   
         #endregion
         #region PublicData
         public bool gameInProccess { get; set; }
@@ -41,11 +39,6 @@ namespace Sudoku2.ViewModel
         {
             get { return _timer; }
             set => Set(ref _timer, value);
-        }
-        public bool showDecision
-        {
-            get => _showDecision;
-            set => Set(ref _showDecision, value);
         }
         public DispatcherTimer timer { get; set; }
         public ObservableCollection<Brush> Color
@@ -58,12 +51,8 @@ namespace Sudoku2.ViewModel
             get => _CellsArray;
             set => Set(ref _CellsArray, value);
         }
-        public ObservableCollection<string> ReadyField
-        {
-            get => _ReadyField;
-            set => Set(ref _ReadyField, value);
-        }
         public NewNumbersWindow ElementChooseWindow { get; set; }
+        public ObservableCollection<string> ReadyField { get; set; }
         #endregion
         #region Commands
         public ICommand ContinueCommand { get; set; }
@@ -90,13 +79,13 @@ namespace Sudoku2.ViewModel
             NewNumberAssigningCommand = new Command(NewNumberAssigningCommandAction, CanUseNewNumberAssigningCommand);
             NewGameCommand = new Command(NewGameCommandAction, CanUseAllCommand);
             #endregion
-
+             
             var _cells = Enumerable.Range(0, 81).Select(i => "");
             var _colors = Enumerable.Range(0, 81).Select(i => new SolidColorBrush(Colors.White));
 
             _color = new ObservableCollection<Brush>(_colors);
             _CellsArray = new ObservableCollection<string>(_cells);
-            _ReadyField = new ObservableCollection<string>(_cells);
+            ReadyField = new ObservableCollection<string>(_cells);
 
 
             StartGame();
@@ -110,7 +99,7 @@ namespace Sudoku2.ViewModel
         private bool CanUsePauseCommand(object p) => !isPause;
         private bool CanUseNewNumberAssigningCommand(object p) => !isPause && gameInProccess;
         #endregion
-
+         
         #region CommandsAction
         private void NewGameCommandAction(object p)
         {
@@ -126,16 +115,7 @@ namespace Sudoku2.ViewModel
         }
         private void ShowDecisionCommandAction(object p)
         {
-            if (showDecision)
-            {
-                GameSolution.ShowDecision(TempField, this);
-
-            }
-            else
-            {
-                GameSolution.HideDecision(TempField, this);
-
-            }
+            CellsArray = GameSolution.FieldSolution(model, ReadyField, Color); //Асинхронним!!!
         }
         private void CleanAllCommandAction(object p)
         {
@@ -204,9 +184,9 @@ namespace Sudoku2.ViewModel
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    Color[i * 9 + j] = new SolidColorBrush(Colors.White);
-                    ReadyField[i * 9 + j] = model.Field[i, j];
+                    Color[i * 9 + j] = new SolidColorBrush(Colors.Snow);
                     CellsArray[i * 9 + j] = model.Field[i, j];
+                    ReadyField[i * 9 + j] = model.Field[i, j];
                 }
             }
         }
@@ -231,16 +211,13 @@ namespace Sudoku2.ViewModel
             TempField = new string[9, 9];
             gameInProccess = true;
             isPause = false;
-            showDecision = false;
             #endregion
 
             CollectionCreating();
-
-            ReadyField = GameSolution.FieldSolution(model, ReadyField); //Асинхронним!!!
 
             Time();
         }
         #endregion
     }
-}
-        
+} 
+         

@@ -2,6 +2,7 @@
 using Sudoku2.Resources;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,12 +60,10 @@ namespace Sudoku2.ViewModel
             bool isGameWinning = false;
             #endregion
 
-            GameSolution.NewNumberAssignment(Cell, vm, p);
-
-            isFullField = GameSolution.NullElementsCount(vm.CellsArray);
+            isFullField = NumberAssignment.NewNumberAssignment(Cell, vm, p);
 
             if (isFullField)
-                isGameWinning = Enumerable.SequenceEqual(vm.CellsArray, vm.ReadyField);
+                isGameWinning = IsFieldReady(vm.Color);
 
             if(!isGameWinning && isFullField)
                 MessageBox.Show("SomtingWrong, try to change...", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -81,7 +80,19 @@ namespace Sudoku2.ViewModel
 
         }
 
-        #endregion 
+        #endregion
+        #region PrivateMethods
+        private bool IsFieldReady(ObservableCollection<Brush> color)
+        {
+            for (int i = 0; i < 81; i++)
+            {
+                if (color[i].ToString() == Brushes.Red.ToString())
+                    return false;
+            }
 
+            return true;
+        }
+
+        #endregion
     }
-}
+}  
