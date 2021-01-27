@@ -19,7 +19,7 @@ using System.Windows.Threading;
 namespace Sudoku2.ViewModel
 {
     public class StartGamePageViewModel : ViewModelBase
-    {
+    { 
         #region Data
         #region PrivateData
         private StartGamePage startGamePage;
