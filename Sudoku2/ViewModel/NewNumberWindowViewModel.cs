@@ -81,6 +81,7 @@ namespace Sudoku2.ViewModel
         }
 
         #endregion
+
         #region PrivateMethods
         private bool IsFieldReady(ObservableCollection<Brush> color)
         {
@@ -95,4 +96,4 @@ namespace Sudoku2.ViewModel
 
         #endregion
     }
-}  
+}   

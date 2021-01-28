@@ -99,7 +99,7 @@ namespace Sudoku2.ViewModel
         #endregion
          
         #region CommandsAction
-        private void NewGameCommandAction(object p)//
+        private void NewGameCommandAction(object p)
         {
             model = FileReader.ReadFromFile();
             if (model is null)
@@ -116,7 +116,15 @@ namespace Sudoku2.ViewModel
         }
         private void ShowDecisionCommandAction(object p)
         {
-            CellsArray = GameSolution.FieldSolution(model, CellsArray, Color); //Асинхронним!!!
+
+            var cellCount = Enumerable.Range(0, 81)
+            .Select(i => CellsArray[i]);
+
+            List<string> tempList = new List<string>(cellCount);
+
+            tempList = GameSolution.FieldSolution(model, tempList); //Асинхронним!!!
+
+            CellsArray = CellAssignment(tempList);
         }
         private void CleanAllCommandAction(object p)
         {
@@ -220,7 +228,20 @@ namespace Sudoku2.ViewModel
             Time();
 
         }
+        private ObservableCollection<string> CellAssignment(List<string> tempList)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                for (int i = 0; i < 81; i++)
+                {
+                    if (tempList[i] is null) return CellsArray;
+                    CellsArray[i] = tempList[i];
+                    if (j is 1) Color[i] = new SolidColorBrush(Colors.AntiqueWhite);
+                }
+            }
+            return CellsArray;
+        }
         #endregion
     }
 } 
-         
+           

@@ -12,7 +12,7 @@ namespace Sudoku2.BuisnessLogic
 {
     public static class GameSolution 
     {
-        public static ObservableCollection<string> FieldSolution(FieldModel model, ObservableCollection<string> field, ObservableCollection<Brush> color)
+        public static List<string> FieldSolution(FieldModel model, List<string> field)
         {
             #region private Data
             int nullElemntsCount = 0;
@@ -27,19 +27,20 @@ namespace Sudoku2.BuisnessLogic
 
             while (true)
             {
-                SolutionAlgorithm(sameElement);
+                bool notCorrectField = SolutionAlgorithm(sameElement);
                 nullElementCountAfterFieldFilling = CheckTheCorectFieldCells(ref readyField, nullElementCountAfterFieldFilling);
                 if (readyField) break;
 
                 iterationCount++;
-                if (iterationCount > 9)
+                if (iterationCount > 9 || notCorrectField)
                 {
                     MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
                 }
             }
+
             if(readyField)
-            field = CellsAssign(field, TempField, color);
+            field = CellsAssign(field, TempField);
 
             return field;
         }
@@ -97,7 +98,7 @@ namespace Sudoku2.BuisnessLogic
             return true;
         }
 
-        private static string[,] CellsAssign(string[,] assignableArray, ObservableCollection<string> assignArray)
+        private static string[,] CellsAssign(string[,] assignableArray, List<string> assignArray)
         {
             for (int i = 0; i < assignableArray.GetLength(0); i++)
             {
@@ -108,19 +109,18 @@ namespace Sudoku2.BuisnessLogic
             }
             return assignableArray;
         }
-        private static ObservableCollection<string> CellsAssign(ObservableCollection<string> assignArray, string[,] assignableArray, ObservableCollection<Brush> color)
+        private static List<string> CellsAssign(List<string> assignArray, string[,] assignableArray)
         {
             for (int i = 0; i < assignableArray.GetLength(0); i++)
             {
                 for (int j = 0; j < assignableArray.GetLength(1); j++)
                 {
-                    color[i * 9 + j] = new SolidColorBrush(Colors.AntiqueWhite);
                     assignArray[i * 9 + j] = assignableArray[i, j];
                 }
             }
             return assignArray;
         }
-        private static void SolutionAlgorithm(bool sameElement)
+        private static bool SolutionAlgorithm(bool sameElement)
         {
             int CurrentNewElemnt;
             string FixedCurrentElement = null;
@@ -131,8 +131,18 @@ namespace Sudoku2.BuisnessLogic
             {
                 for (int j = 0; j < TempField.GetLength(1); j++)
                 {
-                    if (TempField[i, j] != null) continue;
-
+                    if (TempField[i, j] != null)
+                    {
+                        CurrentNewElemnt = Convert.ToInt32(TempField[i, j]);
+                        TempField[i, j] = null;
+                        sameElement = SearchSameElemnt(TempField, i, j, CurrentNewElemnt);
+                        if (sameElement is true)
+                        {
+                            return true;
+                        }
+                        TempField[i, j] = CurrentNewElemnt.ToString();
+                        continue;
+                    }
 
                     CurrentNewElemnt = 0;
                     CanAssignMoreThanOneElement = false;
@@ -181,10 +191,12 @@ namespace Sudoku2.BuisnessLogic
                         }
 */
                     }
+
                     TempField[i, j] = FixedCurrentElement;
                     FixedCurrentElement = null;
                 }
             }
+            return false;
         }
        
         private static int NullElemntsCount(int nullElementsCount)
@@ -221,4 +233,4 @@ namespace Sudoku2.BuisnessLogic
 
     } 
 }
-         
+          

@@ -40,12 +40,14 @@ namespace Sudoku2.ViewModel
             ExitCommand = new Command(ExitCommandAction, CanUseExitCommand);
         }
 
+        #region Commands
         private bool CanUseExitCommand(object p) => true;
 
         private void ExitCommandAction(object p)
         {
             mainWindow.Close();
         }
+        #endregion
     }
 }
-  
+   
