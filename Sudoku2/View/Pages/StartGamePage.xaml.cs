@@ -108,6 +108,7 @@ namespace Sudoku2.View.Pages
             else
             {
                 button[i - 1, j - 1].FontWeight = FontWeights.Bold;
+                button[i - 1, j - 1].Foreground = Brushes.AliceBlue;
             }
 
 
@@ -118,4 +119,4 @@ namespace Sudoku2.View.Pages
         #endregion
     }
 }
- 
+   
