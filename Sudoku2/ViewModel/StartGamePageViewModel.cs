@@ -52,7 +52,6 @@ namespace Sudoku2.ViewModel
             set => Set(ref _CellsArray, value);
         }
         public NewNumbersWindow ElementChooseWindow { get; set; }
-        public ObservableCollection<string> ReadyField { get; set; }
         #endregion
         #region Commands
         public ICommand ContinueCommand { get; set; }
@@ -85,7 +84,6 @@ namespace Sudoku2.ViewModel
 
             _color = new ObservableCollection<Brush>(_colors);
             _CellsArray = new ObservableCollection<string>(_cells);
-            ReadyField = new ObservableCollection<string>(_cells);
 
 
             StartGame();
@@ -101,7 +99,7 @@ namespace Sudoku2.ViewModel
         #endregion
          
         #region CommandsAction
-        private void NewGameCommandAction(object p)
+        private void NewGameCommandAction(object p)//
         {
             model = FileReader.ReadFromFile();
             if (model is null)
@@ -110,12 +108,15 @@ namespace Sudoku2.ViewModel
                 return;
             }
             timer.Stop();
+
+            startGamePage = null;
+
             StartGame();
           
         }
         private void ShowDecisionCommandAction(object p)
         {
-            CellsArray = GameSolution.FieldSolution(model, ReadyField, Color); //Асинхронним!!!
+            CellsArray = GameSolution.FieldSolution(model, CellsArray, Color); //Асинхронним!!!
         }
         private void CleanAllCommandAction(object p)
         {
@@ -186,7 +187,6 @@ namespace Sudoku2.ViewModel
                 {
                     Color[i * 9 + j] = new SolidColorBrush(Colors.Snow);
                     CellsArray[i * 9 + j] = model.Field[i, j];
-                    ReadyField[i * 9 + j] = model.Field[i, j];
                 }
             }
         }
@@ -212,10 +212,13 @@ namespace Sudoku2.ViewModel
             gameInProccess = true;
             isPause = false;
             #endregion
-
             CollectionCreating();
 
+            if(startGamePage is null)
+            startGamePage = new StartGamePage(model);
+
             Time();
+
         }
         #endregion
     }

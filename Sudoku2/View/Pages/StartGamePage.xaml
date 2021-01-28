@@ -29,12 +29,12 @@
 
         </Label>
 
-        <Button VerticalAlignment="Top"
+       <!-- <Button VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Width="154"
                 Height="56" Margin="0,30,28,0"
                 Content="New Game"
-                Command="{Binding NewGameCommand}"/>
+                Command="{Binding NewGameCommand}"/> -->
 
         <Button VerticalAlignment="Top"
                 HorizontalAlignment="Right"

@@ -2,10 +2,10 @@
 using Sudoku2.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Sudoku2.BuisnessLogic
@@ -19,7 +19,7 @@ namespace Sudoku2.BuisnessLogic
             int nullElementCountAfterFieldFilling = 0;
             bool readyField = false;
             bool sameElement = false;
-
+            int iterationCount = 0;
             #endregion
 
             TempField = CellsAssign(TempField, field);
@@ -28,12 +28,17 @@ namespace Sudoku2.BuisnessLogic
             while (true)
             {
                 SolutionAlgorithm(sameElement);
-                CheckTheCorectFieldCells(ref readyField, ref nullElementCountAfterFieldFilling);
+                nullElementCountAfterFieldFilling = CheckTheCorectFieldCells(ref readyField, nullElementCountAfterFieldFilling);
                 if (readyField) break;
 
-                //TODO: if (nullElemntsCount == nullElementCountAfterFieldFilling) {new algo}
+                iterationCount++;
+                if (iterationCount > 9)
+                {
+                    MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    break;
+                }
             }
-
+            if(readyField)
             field = CellsAssign(field, TempField, color);
 
             return field;
@@ -75,28 +80,13 @@ namespace Sudoku2.BuisnessLogic
             {
                 for (int n = 0; n < 3; n++)
                 {
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k, n, 1.4, 1.3, 1.4, 1.3, ref SameElemntInSquar)) break;
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 1, n - 1, 1.7, 1.6, 1.7, 1.6, ref SameElemntInSquar)) break;
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 2, n - 2, 1.1, 0.9, 1.1, 0.9, ref SameElemntInSquar)) break;
-
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k, n - 1, 1.4, 1.2, 1.7, 1.6, ref SameElemntInSquar)) break;
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k, n - 2, 1.4, 1.2, 1.1, 0.9, ref SameElemntInSquar)) break;
-
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 1, n, 1.7, 1.6, 1.4, 1.3, ref SameElemntInSquar)) break;
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 1, n - 2, 1.7, 1.6, 1.1, 0.9, ref SameElemntInSquar)) break;
-
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 2, n, 1.1, 0.9, 1.4, 1.3, ref SameElemntInSquar)) break;
-
-                    if (SearchSameElemntInSquar(CurrentElement, CurrentRow, ref CurrentColumn, ref Arr, k - 2, n - 1, 1.1, 0.9, 1.7, 1.6, ref SameElemntInSquar)) break;
-
+                    if (CurrentElement.ToString() == Arr[((CurrentRow / 3) * 3) + k, ((CurrentColumn / 3) * 3) + n] &&
+                        Arr[((CurrentRow / 3) * 3) + k, ((CurrentColumn / 3) * 3) + n] != null)
+                    {
+                        SameElemntInSquar = true;
+                        break;
+                    }
+                 
                 }
 
             }
@@ -132,6 +122,10 @@ namespace Sudoku2.BuisnessLogic
         }
         private static void SolutionAlgorithm(bool sameElement)
         {
+            int CurrentNewElemnt;
+            string FixedCurrentElement = null;
+            bool CanAssignMoreThanOneElement;
+
 
             for (int i = 0; i < TempField.GetLength(0); i++)
             {
@@ -140,7 +134,8 @@ namespace Sudoku2.BuisnessLogic
                     if (TempField[i, j] != null) continue;
 
 
-                    int CurrentNewElemnt = 0;
+                    CurrentNewElemnt = 0;
+                    CanAssignMoreThanOneElement = false;
 
                     while (true)
                     {
@@ -152,47 +147,49 @@ namespace Sudoku2.BuisnessLogic
 
                         sameElement = SearchSameElemnt(TempField, i, j, CurrentNewElemnt);
 
-                        if (sameElement) continue;
-
-
-                        if (!sameElement && TempField[i, j] is null)
-                            TempField[i, j] = CurrentNewElemnt.ToString();
-
+                        if (sameElement is true)
+                        {
+                            continue;
+                        }
                         else
                         {
-                            //TODO: Написать второй(запасной) алгоритм по решению row+1 column+1
+                            if (CanAssignMoreThanOneElement is true)
+                            {
+                                FixedCurrentElement = null;
+                                break;
+                            }
+                            else if (CanAssignMoreThanOneElement is false)
+                            {
+                                FixedCurrentElement = CurrentNewElemnt.ToString();
+                                CanAssignMoreThanOneElement = true;
+                            }
+                        }
+
+
+
+
+
+/*
+                        if (TempField[i, j] is null)
+                        {
+                            TempField[i, j] = CurrentNewElemnt.ToString();
+                        }
+                        else
+                        {
                             TempField[i, j] = null;
                             break;
                         }
-
+*/
                     }
+                    TempField[i, j] = FixedCurrentElement;
+                    FixedCurrentElement = null;
                 }
             }
         }
-        private static bool SearchSameElemntInSquar(int CurrentElemnt, int i, ref int j, ref string[,] Field, int k, int n, double x1, double y1, double x2, double y2, ref bool SameElemntInSquar)
-        {
-
-
-            double newI = (Convert.ToDouble(i) + 1) / 3;
-            double newJ = (Convert.ToDouble(j) + 1) / 3;
-
-            if ((newI - (int)newI) + 1 < x1 && (newI - (int)newI) + 1 > y1)
-            {
-                if ((newJ - (int)newJ) + 1 < x2 && (newJ - (int)newJ) + 1 > y2)
-                {
-
-                    if (CurrentElemnt.ToString() == Field[i + k, j + n] && Field[i + k, j + n] != null)
-                    {
-                        SameElemntInSquar = true;
-                        return true;
-                    }
-
-                }
-            }
-            return false;
-        }
+       
         private static int NullElemntsCount(int nullElementsCount)
         {
+            nullElementsCount = 0;
             for (int i = 0; i < TempField.GetLength(0); i++)
             {
                 for (int j = 0; j < TempField.GetLength(1); j++)
@@ -203,9 +200,10 @@ namespace Sudoku2.BuisnessLogic
             }
             return nullElementsCount;
         }
-        private static void CheckTheCorectFieldCells(ref bool readyField, ref int nullElementCountAfterFieldFilling)
+        private static int CheckTheCorectFieldCells(ref bool readyField, int nullElementCountAfterFieldFilling)
         {
             readyField = true;
+            nullElementCountAfterFieldFilling = 0;
             for (int i = 0; i < TempField.GetLength(0); i++)
             {
                 for (int j = 0; j < TempField.GetLength(1); j++)
@@ -213,10 +211,11 @@ namespace Sudoku2.BuisnessLogic
                     if (TempField[i, j] == null)
                     {
                         readyField = false;
-                        nullElementCountAfterFieldFilling = i * 9 + j;
+                        nullElementCountAfterFieldFilling++;
                     }
                 }
             }
+            return nullElementCountAfterFieldFilling;
         }
         #endregion
 

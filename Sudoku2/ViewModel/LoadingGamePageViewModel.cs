@@ -22,10 +22,9 @@ namespace Sudoku2.ViewModel
 
         private FieldModel model;
         private Page StartGamePage;
-        private MainWindowViewModel MainWindowViewModel;
+        private MainWindowViewModel vm;
         private bool readyField = false;
    
-        public ICommand StartCommand { get; set; }
         public ICommand LoadGameCommand { get; set; }
         public ICommand ExitCommand { get; set; }
         public ICommand RulesCommand { get; set; }
@@ -33,10 +32,9 @@ namespace Sudoku2.ViewModel
 
         public LoadingGamePageViewModel(MainWindowViewModel vm)
         {
-            MainWindowViewModel = vm;
+            this.vm = vm;
 
             #region Commands
-            StartCommand = new Command(StartCommandAction, CanUseStartCommand);
             LoadGameCommand = new Command(LoadGameCommandAction, CanUseLoadGameCommand);
             ExitCommand = new Command(ExitCommandAction, CanUseExitCommand);
             RulesCommand = new Command(RulesCommandAction, CanUseRulesCommand);
@@ -54,11 +52,7 @@ namespace Sudoku2.ViewModel
         #region CommandsActions
         private void ExitCommandAction(object p)
         {
-            MainWindowViewModel.mainWindow.Close();
-        }
-        private void StartCommandAction(object p)
-        {
-            MainWindowViewModel.CurrentPage = StartGamePage;
+            vm.mainWindow.Close();
         }
         private void LoadGameCommandAction(object p)
         {
@@ -72,7 +66,9 @@ namespace Sudoku2.ViewModel
             }
             readyField = true;
             MessageBox.Show("Your field is ready!", "Complete", MessageBoxButton.OK);
-            StartGamePage = new StartGamePage(model);//ТРЕБА ЗРОБИТИ АСИНРОННИМ у методі StartCommand, АЛЕ НЕ ВИЙДЕ!
+            StartGamePage = new StartGamePage(model);
+
+            vm.CurrentPage = StartGamePage;
 
         }
         private void RulesCommandAction(object p)
