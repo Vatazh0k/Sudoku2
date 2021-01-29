@@ -58,12 +58,28 @@ namespace Sudoku2.ViewModel
             #region Data
             bool isFullField = false;
             bool isGameWinning = false;
+            bool correctAssignment = false;
             #endregion
 
-            isFullField = NumberAssignment.NewNumberAssignment(Cell, vm, p);
+            var listElementsCount = Enumerable.Range(0, 81).Select(i => vm.CellsArray[i]);
+            List<string> TempList = new List<string>(listElementsCount);
+            
+            correctAssignment = NumberAssignment.NewNumberAssignment(Cell, TempList, p);
+            if (correctAssignment is false)
+            {
+                vm.CellsArray[Cell] = p.ToString();
+                vm.Color[Cell] = new SolidColorBrush(Colors.Red);
+            }
+            else if (correctAssignment is true)
+            {
+                vm.CellsArray[Cell] = p.ToString();
+                vm.Color[Cell] = new SolidColorBrush(Colors.AntiqueWhite);
+            }
 
+            isFullField = isFieldHasNullElements();
+              
             if (isFullField)
-                isGameWinning = IsFieldReady(vm.Color);
+                isGameWinning = CheckTheCorrectCells(vm.Color);
 
             if(!isGameWinning && isFullField)
                 MessageBox.Show("SomtingWrong, try to change...", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -83,7 +99,15 @@ namespace Sudoku2.ViewModel
         #endregion
 
         #region PrivateMethods
-        private bool IsFieldReady(ObservableCollection<Brush> color)
+        private bool isFieldHasNullElements()
+        {
+            for (int i = 0; i < 81; i++)
+                if (vm.CellsArray[i] is null)
+                    return false;
+            return true;
+
+        }
+        private bool CheckTheCorrectCells(ObservableCollection<Brush> color)
         {
             for (int i = 0; i < 81; i++)
             {
@@ -96,4 +120,4 @@ namespace Sudoku2.ViewModel
 
         #endregion
     }
-}   
+}    

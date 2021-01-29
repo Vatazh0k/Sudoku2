@@ -116,7 +116,6 @@ namespace Sudoku2.ViewModel
         }
         private void ShowDecisionCommandAction(object p)
         {
-
             var cellCount = Enumerable.Range(0, 81)
             .Select(i => CellsArray[i]);
 
@@ -244,4 +243,4 @@ namespace Sudoku2.ViewModel
         #endregion
     }
 } 
-           
+            

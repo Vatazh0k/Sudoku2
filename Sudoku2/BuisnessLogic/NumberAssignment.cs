@@ -10,7 +10,7 @@ namespace Sudoku2.BuisnessLogic
 {
     public static class NumberAssignment
     {
-        public static bool NewNumberAssignment(int Cell, StartGamePageViewModel vm, object p)
+        public static bool NewNumberAssignment(int Cell, List<string>CellsArray, object p)
         {
             #region Data
             bool isSameElement = false;
@@ -21,19 +21,18 @@ namespace Sudoku2.BuisnessLogic
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    tempField[i, j] = vm.CellsArray[i * 9 + j];
+                    tempField[i, j] = CellsArray[i * 9 + j];
                 }
             }
 
-            vm.Color[Cell] = new SolidColorBrush(Colors.AntiqueWhite);
-            vm.CellsArray[Cell] = p.ToString();
+            CellsArray[Cell] = p.ToString();
 
             bool CicleEnd = false;
-            for (int i = 0, CellSearch = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 9; j++, CellSearch++)
+                for (int j = 0; j < 9; j++)
                 {
-                    if (CellSearch == Cell)
+                    if ((i*9+j) == Cell)
                     {
                         tempField[i, j] = null;
                         CicleEnd = true;
@@ -45,16 +44,12 @@ namespace Sudoku2.BuisnessLogic
             }
 
             if (isSameElement is true)
-                vm.Color[Cell] = new SolidColorBrush(Colors.Red);
+                return false;
 
-            for (int i = 0; i < 81; i++)
-                if (vm.CellsArray[i] is null)
-                    return false;
             return true;
-
-
+             
         }
 
     }
 }
- 
+  
