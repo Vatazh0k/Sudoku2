@@ -19,28 +19,26 @@ namespace Sudoku2.BuisnessLogic
             int nullElementCountAfterFieldFilling = 0;
             bool readyField = false;
             bool sameElement = false;
-            int iterationCount = 0;
             #endregion
 
             TempField = CellsAssign(TempField, field);
-            nullElemntsCount = NullElemntsCount(nullElemntsCount);
+            nullElemntsCount = SearchNullElements(nullElemntsCount);
 
-            while (true)
+            for (int i = 0; i <= 9 * 2; i++)
             {
                 bool notCorrectField = SolutionAlgorithm(sameElement);
-                nullElementCountAfterFieldFilling = CheckTheCorectFieldCells(ref readyField, nullElementCountAfterFieldFilling);
+                nullElementCountAfterFieldFilling = SearchCorrectCells(ref readyField, nullElementCountAfterFieldFilling);
                 if (readyField) break;
 
-                iterationCount++;
-                if (iterationCount > 9 || notCorrectField)
+                if (notCorrectField || i == 9*2)
                 {
                     MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
                 }
             }
-
-            if(readyField)
-            field = CellsAssign(field, TempField);
+             
+            if (readyField)
+                field = CellsAssign(field, TempField);
 
             return field;
         }
@@ -122,10 +120,11 @@ namespace Sudoku2.BuisnessLogic
         }
         private static bool SolutionAlgorithm(bool sameElement)
         {
+            #region Data
             int CurrentNewElemnt;
             string FixedCurrentElement = null;
             bool CanAssignMoreThanOneElement;
-
+            #endregion
 
             for (int i = 0; i < TempField.GetLength(0); i++)
             {
@@ -144,18 +143,11 @@ namespace Sudoku2.BuisnessLogic
                         continue;
                     }
 
-                    CurrentNewElemnt = 0;
                     CanAssignMoreThanOneElement = false;
 
-                    while (true)
+                    for (int k = 0; k < 9; k++)
                     {
-
-                        CurrentNewElemnt++;
-                        if (CurrentNewElemnt == 10)
-                            break;
-
-
-                        sameElement = SearchSameElemnt(TempField, i, j, CurrentNewElemnt);
+                        sameElement = SearchSameElemnt(TempField, i, j, k+1);
 
                         if (sameElement is true)
                         {
@@ -170,26 +162,10 @@ namespace Sudoku2.BuisnessLogic
                             }
                             else if (CanAssignMoreThanOneElement is false)
                             {
-                                FixedCurrentElement = CurrentNewElemnt.ToString();
+                                FixedCurrentElement = (k+1).ToString();
                                 CanAssignMoreThanOneElement = true;
                             }
                         }
-
-
-
-
-
-/*
-                        if (TempField[i, j] is null)
-                        {
-                            TempField[i, j] = CurrentNewElemnt.ToString();
-                        }
-                        else
-                        {
-                            TempField[i, j] = null;
-                            break;
-                        }
-*/
                     }
 
                     TempField[i, j] = FixedCurrentElement;
@@ -199,7 +175,7 @@ namespace Sudoku2.BuisnessLogic
             return false;
         }
        
-        private static int NullElemntsCount(int nullElementsCount)
+        private static int SearchNullElements(int nullElementsCount)
         {
             nullElementsCount = 0;
             for (int i = 0; i < TempField.GetLength(0); i++)
@@ -212,7 +188,7 @@ namespace Sudoku2.BuisnessLogic
             }
             return nullElementsCount;
         }
-        private static int CheckTheCorectFieldCells(ref bool readyField, int nullElementCountAfterFieldFilling)
+        private static int SearchCorrectCells(ref bool readyField, int nullElementCountAfterFieldFilling)
         {
             readyField = true;
             nullElementCountAfterFieldFilling = 0;
@@ -233,4 +209,4 @@ namespace Sudoku2.BuisnessLogic
 
     } 
 }
-          
+           
