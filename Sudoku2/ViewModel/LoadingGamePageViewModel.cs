@@ -65,7 +65,6 @@ namespace Sudoku2.ViewModel
                 return;
             }
             readyField = true;
-            MessageBox.Show("Your field is ready!", "Complete", MessageBoxButton.OK);
             StartGamePage = new StartGamePage(model);
 
             vm.CurrentPage = StartGamePage;
@@ -80,4 +79,4 @@ namespace Sudoku2.ViewModel
         #endregion
     }
 }   
-     
+      

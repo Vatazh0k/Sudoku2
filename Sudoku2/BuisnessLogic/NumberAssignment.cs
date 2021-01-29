@@ -10,22 +10,9 @@ namespace Sudoku2.BuisnessLogic
 {
     public static class NumberAssignment
     {
-        public static bool NewNumberAssignment(int Cell, List<string>CellsArray, object p)
+        public static bool NewNumberAssignment(int Cell, string[,]CellsArray, object p)
         {
-            #region Data
             bool isSameElement = false;
-            string[,] tempField = new string[9, 9];
-            #endregion  
-              
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    tempField[i, j] = CellsArray[i * 9 + j];
-                }
-            }
-
-            CellsArray[Cell] = p.ToString();
 
             bool CicleEnd = false;
             for (int i = 0; i < 9; i++)
@@ -34,9 +21,9 @@ namespace Sudoku2.BuisnessLogic
                 {
                     if ((i*9+j) == Cell)
                     {
-                        tempField[i, j] = null;
+                        CellsArray[i, j] = null;
                         CicleEnd = true;
-                        isSameElement = GameSolution.SearchSameElemnt(tempField, i, j, Convert.ToInt32(p));
+                        isSameElement = GameSolution.SearchSameElemnt(CellsArray, i, j, Convert.ToInt32(p));
                         break;
                     }
                 }
@@ -52,4 +39,4 @@ namespace Sudoku2.BuisnessLogic
 
     }
 }
-  
+   

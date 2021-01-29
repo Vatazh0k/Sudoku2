@@ -38,7 +38,7 @@ namespace Sudoku2.ViewModel
 
 
         #region CanUseCommand
-        private bool CanUseCommandExecute(object p) => true;                              
+        private bool CanUseCommandExecute(object p) => true;
         private bool CanUseCleanCommand(object p) => true;
 
         #endregion
@@ -55,16 +55,14 @@ namespace Sudoku2.ViewModel
         {
             int Cell = Convert.ToInt32(cellNumber);
 
-            #region Data
+            string[,] TempArr = new string[9, 9];
             bool isFullField = false;
             bool isGameWinning = false;
             bool correctAssignment = false;
-            #endregion
 
-            var listElementsCount = Enumerable.Range(0, 81).Select(i => vm.CellsArray[i]);
-            List<string> TempList = new List<string>(listElementsCount);
-            
-            correctAssignment = NumberAssignment.NewNumberAssignment(Cell, TempList, p);
+            TempArr = CellsAsignment(TempArr);
+
+            correctAssignment = NumberAssignment.NewNumberAssignment(Cell, TempArr, p);
             if (correctAssignment is false)
             {
                 vm.CellsArray[Cell] = p.ToString();
@@ -77,11 +75,11 @@ namespace Sudoku2.ViewModel
             }
 
             isFullField = isFieldHasNullElements();
-              
+
             if (isFullField)
                 isGameWinning = CheckTheCorrectCells(vm.Color);
 
-            if(!isGameWinning && isFullField)
+            if (!isGameWinning && isFullField)
                 MessageBox.Show("SomtingWrong, try to change...", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             if (isGameWinning)
@@ -99,6 +97,17 @@ namespace Sudoku2.ViewModel
         #endregion
 
         #region PrivateMethods
+        private string[,] CellsAsignment(string[,] tempArr)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    tempArr[i, j] = vm.CellsArray[i * 9 + j];
+                }
+            }
+            return tempArr;
+        }
         private bool isFieldHasNullElements()
         {
             for (int i = 0; i < 81; i++)
@@ -120,4 +129,4 @@ namespace Sudoku2.ViewModel
 
         #endregion
     }
-}    
+}     

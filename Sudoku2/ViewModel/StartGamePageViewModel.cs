@@ -5,12 +5,8 @@ using Sudoku2.Resources;
 using Sudoku2.View.Pages;
 using Sudoku2.View.Windows;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -19,7 +15,7 @@ using System.Windows.Threading;
 namespace Sudoku2.ViewModel
 {
     public class StartGamePageViewModel : ViewModelBase
-    { 
+    {
         #region Data
         #region PrivateData
         private StartGamePage startGamePage;
@@ -30,11 +26,11 @@ namespace Sudoku2.ViewModel
 
         private ObservableCollection<Brush> _color;
         private ObservableCollection<string> _CellsArray;
-   
+
         #endregion
         #region PublicData
         public bool gameInProccess { get; set; }
-        public bool isPause { get; set; } 
+        public bool isPause { get; set; }
         public string Timer
         {
             get { return _timer; }
@@ -76,9 +72,8 @@ namespace Sudoku2.ViewModel
             ContinueCommand = new Command(ContinueCommandAction, CanUseContinueCommand);
             PauseCommand = new Command(PauseCommandAction, CanUsePauseCommand);
             NewNumberAssigningCommand = new Command(NewNumberAssigningCommandAction, CanUseNewNumberAssigningCommand);
-            NewGameCommand = new Command(NewGameCommandAction, CanUseAllCommand);
             #endregion
-             
+
             var _cells = Enumerable.Range(0, 81).Select(i => "");
             var _colors = Enumerable.Range(0, 81).Select(i => new SolidColorBrush(Colors.White));
 
@@ -97,34 +92,23 @@ namespace Sudoku2.ViewModel
         private bool CanUsePauseCommand(object p) => !isPause;
         private bool CanUseNewNumberAssigningCommand(object p) => !isPause && gameInProccess;
         #endregion
-         
+
         #region CommandsAction
-        private void NewGameCommandAction(object p)
-        {
-            model = FileReader.ReadFromFile();
-            if (model is null)
-            {
-                MessageBox.Show("Incorrect field!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            timer.Stop();
-
-            startGamePage = null;
-
-            StartGame();
-          
-        }
         private void ShowDecisionCommandAction(object p)
         {
-            var cellCount = Enumerable.Range(0, 81)
-            .Select(i => CellsArray[i]);
+            string[,] tempArr = new string[9, 9];
+            tempArr = CellsAsignment(tempArr);
 
-            List<string> tempList = new List<string>(cellCount);
-
-            tempList = GameSolution.FieldSolution(model, tempList); //Асинхронним!!!
-
-            CellsArray = CellAssignment(tempList);
-        }
+            if (!IsAllCellsHasCorrectPositin())
+            {
+                MessageBox.Show("Somthing went wrong \nMaybe you has misstakes", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                tempArr = GameSolution.FieldSolution(tempArr);
+                CellsArray = CellAssignment(tempArr);
+            }
+        } 
         private void CleanAllCommandAction(object p)
         {
             for (int i = 0; i < 9; i++)
@@ -184,8 +168,28 @@ namespace Sudoku2.ViewModel
             newElWindow.ShowDialog();
         }
         #endregion
-         
+
         #region PrivateMethods
+        private string[,] CellsAsignment(string[,] tempArr)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    tempArr[i, j] = CellsArray[i * 9 + j];
+                }
+            }
+            return tempArr;
+        }
+        private bool IsAllCellsHasCorrectPositin()
+        {
+            for (int i = 0; i < 81; i++)
+            {
+                if (Color[i].ToString() == Brushes.Red.ToString())
+                    return false;
+            }
+            return true;
+        }
         private void CollectionCreating()
         {
             for (int i = 0; i < 9; i++)
@@ -227,20 +231,21 @@ namespace Sudoku2.ViewModel
             Time();
 
         }
-        private ObservableCollection<string> CellAssignment(List<string> tempList)
+        private ObservableCollection<string> CellAssignment(string[,] tempArr)
         {
-            for (int j = 0; j < 2; j++)
+            for (int i = 0; i < 9; i++)
             {
-                for (int i = 0; i < 81; i++)
+                for (int j = 0; j < 9; j++)
                 {
-                    if (tempList[i] is null) return CellsArray;
-                    CellsArray[i] = tempList[i];
-                    if (j is 1) Color[i] = new SolidColorBrush(Colors.AntiqueWhite);
+                    if(tempArr[i,j] is null) return CellsArray;
+                    CellsArray[i * 9 + j] = tempArr[i, j];
+                    Color[i * 9 + j] = new SolidColorBrush(Colors.AntiqueWhite);
                 }
             }
+
             return CellsArray;
         }
         #endregion
-    }
+    } 
 } 
             
