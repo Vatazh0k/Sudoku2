@@ -26,24 +26,18 @@ namespace Sudoku2.BuisnessLogic
             {
                 nullElemntsCount = SearchNullElements(nullElemntsCount, TempField);
 
-                bool notCorrectField = SolutionAlgorithm(TempField);
-                
-                if (notCorrectField)//iterationCounter == 9!!!!!
-                {
-                    MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    break;
-                }
+                SolutionAlgorithm(TempField);
+    
                 if (nullElemntsCount == 0) 
                     readyField = true;
-
-                if (readyField)
-                {
-                    field = CellsAssign(field, TempField);
-                    break;
-                }
-
             }
 
+            if (!readyField)
+                MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            if (readyField)
+                field = CellsAssign(field, TempField);
             return field;
         }
      
@@ -104,7 +98,7 @@ namespace Sudoku2.BuisnessLogic
             }
             return assignableArray;
         }
-        private static bool SolutionAlgorithm(string[,] TempField)
+        private static void SolutionAlgorithm(string[,] TempField)
         {
             string FixedCurrentElement = null;
             bool CanAssignMoreThanOneElement;
@@ -115,7 +109,6 @@ namespace Sudoku2.BuisnessLogic
                 for (int j = 0; j < TempField.GetLength(1); j++)
                 {
                     if (TempField[i, j] != null)
-                    
                         continue;
 
                     CanAssignMoreThanOneElement = false;
@@ -147,7 +140,6 @@ namespace Sudoku2.BuisnessLogic
                     FixedCurrentElement = null;
                 }
             }
-            return false;
         }  
         private static int SearchNullElements(int nullElementsCount, string[,] TempField)
         {
@@ -166,4 +158,4 @@ namespace Sudoku2.BuisnessLogic
 
     } 
 }
-             
+              

@@ -116,6 +116,7 @@ namespace Sudoku2.ViewModel
                 for (int j = 0; j < 9; j++)
                 {
                     CellsArray[i * 9 + j] = model.Field[i, j];
+                    Color[i * 9 + j] = new SolidColorBrush(Colors.White);
                 }
             }
         }
