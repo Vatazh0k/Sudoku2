@@ -33,16 +33,14 @@ namespace Sudoku2.BuisnessLogic
             }
 
             if (!readyField)
-                MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+                field = DecisionInEmptyField(field, TempField);
+
 
             if (readyField)
                 field = CellsAssign(field, TempField);
             return field;
         }
-     
 
-        #region PrivateMethods
         public static bool SearchSameElemnt(string[,] Arr, int CurrentRow, int CurrentColumn, int CurrentElement)
         {
             bool SameElemntInRow = false;
@@ -67,7 +65,7 @@ namespace Sudoku2.BuisnessLogic
                     break;
                 }
             }
-            
+
             for (int k = 0; k < 3; k++)
             {
                 for (int n = 0; n < 3; n++)
@@ -78,7 +76,7 @@ namespace Sudoku2.BuisnessLogic
                         SameElemntInSquar = true;
                         break;
                     }
-                 
+
                 }
             }//Squar
 
@@ -87,16 +85,80 @@ namespace Sudoku2.BuisnessLogic
             return true;
         }
 
-        private static string[,] CellsAssign(string[,] assignableArray, string[,] assignArray)
+        #region PrivateMethods
+        private static string[,] DecisionInEmptyField(string[,] Field, string[,] InitialField)
         {
-            for (int i = 0; i < assignableArray.GetLength(0); i++)
+            int FirstNumberToAssigning = 0;
+            int NullElementsCount = 0;
+            int IterartionCount = 0;
+            NullElementsCount = SearchNullElements(NullElementsCount, Field);
+
+            while (IterartionCount != 9)
             {
-                for (int j = 0; j < assignableArray.GetLength(1); j++)
-                {
-                    assignableArray[i, j] = assignArray[i,j];
-                }
+                Field = CellsAssign(Field, InitialField);
+
+                FirstNumberToAssigning++;
+
+                _ = FirstNumberToAssigning == 10 ?
+                    FirstNumberToAssigning = 1 : FirstNumberToAssigning;
+
+                DeepSolutionAlgorithm(FirstNumberToAssigning, Field);
+
+                NullElementsCount = SearchNullElements(NullElementsCount, Field);
+                if (NullElementsCount == 0)
+                    return Field;
+
+                IterartionCount++;
             }
-            return assignableArray;
+
+            MessageBox.Show(" Somthing went wrong. .  .\n Maybe you have a mistake", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return InitialField;
+        }
+        private static void DeepSolutionAlgorithm(int FirstElementToAssign, string[,] Field)
+        {
+            bool CanBreakCicle = false;
+            bool isSameElementFounded;
+            int CurrentElement;
+            int CurrentElementItterationCount = 0;
+
+            for (int i = 0; i < 9; i++)
+            {
+                CurrentElement = FirstElementToAssign;
+
+                for (int j = 0; j < 9; j++)
+                {
+                    if (CurrentElement == 10)
+                        CurrentElement = 1;
+
+                    if (Field[i, j] != null) continue;
+
+                    isSameElementFounded = GameSolution.SearchSameElemnt(Field, i, j, CurrentElement);
+
+                    CurrentElementItterationCount++;
+                    if (isSameElementFounded is true)
+                    {
+                        CurrentElement++;
+                        if (CurrentElement == 10)
+                            CurrentElement = 1;
+                        j--;
+                        if (CurrentElementItterationCount == 10)
+                        {
+                            CanBreakCicle = true;
+                            break;
+                        }
+                        continue;
+                    }
+
+                    CurrentElementItterationCount = 0;
+
+                    if (isSameElementFounded is false)
+                        Field[i, j] = CurrentElement.ToString();
+
+
+                    CurrentElement++;
+                }
+                if (CanBreakCicle) break;
+            }
         }
         private static void SolutionAlgorithm(string[,] TempField)
         {
@@ -153,6 +215,17 @@ namespace Sudoku2.BuisnessLogic
                 }
             }
             return nullElementsCount;
+        }
+        private static string[,] CellsAssign(string[,] assignableArray, string[,] assignArray)
+        {
+            for (int i = 0; i < assignableArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < assignableArray.GetLength(1); j++)
+                {
+                    assignableArray[i, j] = assignArray[i, j];
+                }
+            }
+            return assignableArray;
         }
         #endregion
 
